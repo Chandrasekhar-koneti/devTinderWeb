@@ -4,7 +4,7 @@ import LoginJson from "../../Lotties/Login.json";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Base_Url } from "../../../utils/Const";
+
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
@@ -80,9 +80,13 @@ const SignUp = () => {
       const payload = Object.fromEntries(
         Object.entries(values).filter(([_, v]) => v !== "")
       );
-      const res = await axios.post(`${Base_Url}/signup`, payload, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/signup`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
       if (res.data.msg === "user added") navigate("/login");
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");

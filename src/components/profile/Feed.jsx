@@ -4,7 +4,7 @@ import { motion, useMotionValue } from "framer-motion";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { Base_Url } from "../../../utils/Const";
+
 import useProfile from "../../CustomHooks/useProfile";
 import Lottie from "lottie-react";
 import Nodata from "../../Lotties/Nodata.json";
@@ -32,7 +32,7 @@ export default function Feed() {
       setLoading(true);
 
       const response = await axios.get(
-        `${Base_Url}/user/feed?page=${pageNum}&limit=10`,
+        `${import.meta.env.VITE_BASE_URL}/user/feed?page=${pageNum}&limit=10`,
         { withCredentials: true }
       );
 
@@ -66,7 +66,7 @@ export default function Feed() {
   const reviewUser = async (status, userId) => {
     try {
       await axios.post(
-        `${Base_Url}/request/send/${status}/${userId}`,
+        `${import.meta.env.VITE_BASE_URL}/request/send/${status}/${userId}`,
         {},
         { withCredentials: true }
       );

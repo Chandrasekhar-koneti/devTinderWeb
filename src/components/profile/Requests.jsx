@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Base_Url } from "../../../utils/Const";
+
 import { setRequests } from "../../redux/slices/connectionSlice";
 import { RiCloseLargeFill } from "react-icons/ri";
 import { FaCheck } from "react-icons/fa";
@@ -18,9 +18,12 @@ const Requests = () => {
   // Fetch incoming requests
   const fetchRequests = async () => {
     try {
-      const response = await axios.get(`${Base_Url}/user/request/recieved`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/user/request/recieved`,
+        {
+          withCredentials: true,
+        }
+      );
       profile();
       const list = response?.data?.getRequestList || [];
       dispatch(setRequests(list));
@@ -37,7 +40,7 @@ const Requests = () => {
   const handleAcceptIgnore = async (status, id) => {
     try {
       await axios.post(
-        `${Base_Url}/request/review/${status}/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/request/review/${status}/${id}`,
         {},
         { withCredentials: true }
       );
