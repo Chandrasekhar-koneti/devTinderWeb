@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Base_Url } from "../../../utils/Const";
+
 import { addUser } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
@@ -51,9 +51,13 @@ const Form = ({ setOpenEditProfile }) => {
 
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.patch(`${Base_Url}/profile/edit`, values, {
-        withCredentials: true,
-      });
+      const response = await axios.patch(
+        `${import.meta.env.VITE_BASE_URL}/profile/edit`,
+        values,
+        {
+          withCredentials: true,
+        }
+      );
 
       if (
         response.data.msg &&

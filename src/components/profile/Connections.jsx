@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { Base_Url } from "../../../utils/Const";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setConnections } from "../../redux/slices/connectionSlice";
 import useProfile from "../../CustomHooks/useProfile";
@@ -20,9 +20,12 @@ const Connections = () => {
 
   const connectionsReq = async () => {
     try {
-      const response = await axios.get(`${Base_Url}/user/connections`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/user/connections`,
+        {
+          withCredentials: true,
+        }
+      );
       profile();
       dispatch(setConnections(response.data.data));
     } catch (err) {

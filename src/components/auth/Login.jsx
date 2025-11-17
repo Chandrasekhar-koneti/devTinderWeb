@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
-import { Base_Url } from "../../../utils/Const";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +19,7 @@ const Login = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${Base_Url}/login`,
+        `${import.meta.env.VITE_BASE_URL}/login`,
         { emailId, password },
         { withCredentials: true }
       );
