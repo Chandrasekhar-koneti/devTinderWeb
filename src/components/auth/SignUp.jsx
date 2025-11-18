@@ -75,6 +75,18 @@ const SignUp = () => {
     onSubmit: (values) => handleSubmit(values),
   });
 
+  const handleAddSkill = () => {
+    const input = document.getElementById("signupSkillInput");
+    const value = input.value.trim();
+
+    if (!value) return;
+
+    if (formik.values.skills.length >= 8) return;
+
+    formik.setFieldValue("skills", [...formik.values.skills, value]);
+    input.value = "";
+  };
+
   const handleSubmit = async (values) => {
     try {
       const payload = Object.fromEntries(
@@ -232,7 +244,7 @@ const SignUp = () => {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="btn w-[320px] bg-gradient-to-r from-fuchsia-500 to-blue-500 text-white mt-4"
+                  className="btn w-full bg-gradient-to-r from-fuchsia-500 to-blue-500 text-white mt-4"
                 >
                   Next →
                 </button>
@@ -281,9 +293,11 @@ const SignUp = () => {
                 </div>
 
                 {/* Skills */}
+                {/* Skills */}
                 <div className="w-[320px] max-w-full">
                   <label className="block text-xs mb-1">Skills</label>
 
+                  {/* Selected skills */}
                   <div className="flex flex-wrap gap-2 mb-2">
                     {formik.values.skills.map((skill, i) => (
                       <div
@@ -307,21 +321,35 @@ const SignUp = () => {
                     ))}
                   </div>
 
-                  <input
-                    type="text"
-                    placeholder="Add a skill & press Enter"
-                    className="input input-sm w-full bg-white/20 border text-white"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && e.target.value.trim() !== "") {
-                        e.preventDefault();
-                        formik.setFieldValue("skills", [
-                          ...formik.values.skills,
-                          e.target.value.trim(),
-                        ]);
-                        e.target.value = "";
-                      }
-                    }}
-                  />
+                  {/* Input + Add button for mobile support */}
+                  <div className="flex gap-2">
+                    <input
+                      id="signupSkillInput"
+                      type="text"
+                      placeholder="Add a skill"
+                      className="input input-sm bg-white/20 border text-white flex-1"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleAddSkill();
+                        }
+                      }}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={handleAddSkill}
+                      className="btn btn-sm bg-fuchsia-500 text-white"
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {formik.touched.skills && formik.errors.skills && (
+                    <span className="text-red-400 text-xs">
+                      {formik.errors.skills}
+                    </span>
+                  )}
                 </div>
 
                 {/* Age */}

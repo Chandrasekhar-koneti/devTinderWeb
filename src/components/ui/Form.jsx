@@ -81,6 +81,16 @@ const Form = ({ setOpenEditProfile }) => {
     }
   };
 
+  const handleAddSkill = () => {
+    const input = document.getElementById("skillInput");
+    const value = input.value.trim();
+
+    if (!value) return;
+
+    formik.setFieldValue("skills", [...formik.values.skills, value]);
+    input.value = "";
+  };
+
   useEffect(() => {
     if (error || successMsg) {
       const timer = setTimeout(() => {
@@ -251,21 +261,28 @@ const Form = ({ setOpenEditProfile }) => {
             ))}
           </div>
 
-          <input
-            type="text"
-            placeholder="Add a skill and press Enter"
-            className="input input-md w-full"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && e.target.value.trim() !== "") {
-                e.preventDefault();
-                formik.setFieldValue("skills", [
-                  ...formik.values.skills,
-                  e.target.value.trim(),
-                ]);
-                e.target.value = "";
-              }
-            }}
-          />
+          <div className="flex gap-2">
+            <input
+              id="skillInput"
+              type="text"
+              placeholder="Add a skill"
+              className="input input-md flex-1"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  handleAddSkill();
+                }
+              }}
+            />
+
+            <button
+              type="button"
+              onClick={handleAddSkill}
+              className="btn btn-primary"
+            >
+              Add
+            </button>
+          </div>
 
           {formik.touched.skills && formik.errors.skills && (
             <span className="text-red-500 text-xs mt-1">
