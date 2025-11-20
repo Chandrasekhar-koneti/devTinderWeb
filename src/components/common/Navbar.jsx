@@ -63,7 +63,7 @@ const Navbar = () => {
           to="/"
           className="text-white text-xl font-semibold tracking-wide drop-shadow-sm"
         >
-          DevTinder
+          DevSwipe
         </Link>
 
         <div className="flex items-center gap-3">
