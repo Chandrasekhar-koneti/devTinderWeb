@@ -11,7 +11,7 @@ import Lottie from "lottie-react";
 import Nodata from "../../Lotties/Nodata.json";
 import { useSelector } from "react-redux";
 
-const SWIPE_THRESHOLD = 120; // how far to drag before swipe happens
+const SWIPE_THRESHOLD = 120; //drag
 
 export default function Feed() {
   const [people, setPeople] = useState([]);
@@ -80,7 +80,6 @@ export default function Feed() {
     }
   };
 
-  // Remove card + load next page if needed
   const removeCard = (id) => {
     setPeople((prev) => {
       const updated = prev.filter((p) => p._id !== id);
@@ -91,14 +90,13 @@ export default function Feed() {
     });
   };
 
-  // DRAG handling per card
   const Card = ({ person, index }) => {
     const x = useMotionValue(0);
 
     const handleDragEnd = async (_, info) => {
       const dragX = info.offset.x;
 
-      if (Math.abs(dragX) < SWIPE_THRESHOLD) return; // not enough movement
+      if (Math.abs(dragX) < SWIPE_THRESHOLD) return;
 
       const direction = dragX > 0 ? "right" : "left";
 
@@ -262,7 +260,6 @@ export default function Feed() {
             />
           </div>
 
-          {/* Spinner + Text */}
           <div className="flex gap-2 items-center mt-4 z-[6]">
             {/* <div className="h-6 w-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> */}
             <p className="text-lg font-semibold">

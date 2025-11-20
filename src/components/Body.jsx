@@ -7,12 +7,8 @@ const Body = () => {
 
   return (
     <>
-      <Navbar /> {/* stays above everything, no white bg interference */}
-      <div className="pt-[80px]">
-        {" "}
-        {/* content starts below navbar */}
-        <Outlet />
-      </div>
+      <Navbar />
+      <Outlet />
     </>
   );
 };
