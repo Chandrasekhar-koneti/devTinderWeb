@@ -14,7 +14,6 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [showGenderDropdown, setShowGenderDropdown] = useState(false);
 
-  // STRONG VALIDATION SCHEMA
   const validationSchema = Yup.object({
     firstName: Yup.string()
       .required("First name is required")
@@ -32,7 +31,8 @@ const SignUp = () => {
     password: Yup.string()
       .required("Password is required")
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        // eslint-disable-next-line no-useless-escape
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*\(\)_\+\-\=\[\]\{\}|;:'",\.<>\/\?])[A-Za-z\d!@#\$%\^&\*\(\)_\+\-\=\[\]\{\}|;:'",\.<>\/\?]{8,}$/,
         "Weak password — must include uppercase, lowercase, number & special char"
       ),
 
@@ -43,9 +43,11 @@ const SignUp = () => {
     about: Yup.string()
       .required("About is required")
       .matches(
-        /^[A-Za-z0-9\s.,'-]{10,500}$/,
+        /^[A-Za-z0-9\s.,'@#!&-]{10,500}$/,
         "Only letters, numbers and basic punctuation"
-      ),
+      )
+      .min(10, "Minimum 10 characters")
+      .max(500, "Maximum 500 characters"),
 
     skills: Yup.array()
       .min(1, "Add at least one skill")

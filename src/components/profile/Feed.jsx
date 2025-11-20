@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+// eslint-disable-next-line no-unused-vars
 import { motion, useMotionValue } from "framer-motion";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
@@ -8,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import useProfile from "../../CustomHooks/useProfile";
 import Lottie from "lottie-react";
 import Nodata from "../../Lotties/Nodata.json";
+import { useSelector } from "react-redux";
 
 const SWIPE_THRESHOLD = 120; // how far to drag before swipe happens
 
@@ -21,6 +23,8 @@ export default function Feed() {
   const navigate = useNavigate();
   const { profile } = useProfile();
 
+  const user = useSelector((store) => store.user);
+
   useEffect(() => {
     profile();
   }, []);
@@ -30,7 +34,6 @@ export default function Feed() {
     if (loading || !hasMore) return;
     try {
       setLoading(true);
-
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/user/feed?page=${pageNum}&limit=10`,
         { withCredentials: true }
@@ -114,7 +117,6 @@ export default function Feed() {
       setTimeout(() => setSwipeFeedback(null), 300);
     };
 
-    // Programmatic button swipe
     const swipeProgrammatically = async (direction) => {
       setSwipeFeedback(direction);
 
@@ -141,7 +143,7 @@ export default function Feed() {
           className="w-full h-full rounded-3xl bg-cover bg-center shadow-xl border border-white/10 overflow-hidden"
           style={{ backgroundImage: `url(${person.photoUrl})`, zIndex: index }}
         >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t rounded-3xl from-black/90 via-black/40 to-transparent"></div>
 
           <div className="absolute bottom-0 w-full p-5">
             <div className="backdrop-blur-md bg-white/5 p-4 rounded-xl border border-white/10">
@@ -182,7 +184,7 @@ export default function Feed() {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-b from-[#141e30] to-[#243b55] overflow-hidden">
+    <div className="relative min-h-screen  w-full bg-gradient-to-b from-[#141e30] to-[#243b55] overflow-hidden">
       {/* Header */}
       {people.length > 0 && (
         <div className="sticky top-0 bg-transparent z-20 max-w-md mx-auto px-4 pt-4">
@@ -196,11 +198,14 @@ export default function Feed() {
       {/* No more cards */}
       {people.length === 0 && !hasMore && (
         <div className="mt-16 flex flex-col items-center">
-          <Lottie animationData={Nodata} className="w-52 h-52" />
-          <p className="text-white text-lg font-semibold mt-3">
+          <Lottie
+            animationData={Nodata}
+            className="md:w-64 md:h-64  w-54 h-54"
+          />
+          <p className="text-white md:text-2xl text-lg font-semibold mt-3">
             You’re all caught up!
           </p>
-          <p className="text-gray-300 text-sm">
+          <p className="text-gray-300 text-[20px]">
             Check back later for new profiles.
           </p>
         </div>
@@ -220,12 +225,14 @@ export default function Feed() {
           ))}
       </div>
 
-      {/* Bottom Buttons */}
       {people.length > 0 && (
         <div className="mt-6 flex items-center justify-center gap-8">
           <button
             onClick={() => people[people.length - 1]?.swipe("left")}
-            className="w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center"
+            className={`w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center ${
+              swipeFeedback === "left" &&
+              "transition-transform duration-300 scale-110"
+            } `}
           >
             <IoMdCloseCircle size={25} className="text-red-500" />
           </button>
@@ -239,11 +246,29 @@ export default function Feed() {
         </div>
       )}
 
-      {/* Loading More */}
       {loading && (
-        <div className="mt-8 flex flex-col items-center text-gray-300">
-          <div className="h-6 w-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <p className="text-sm mt-2">Loading more profiles...</p>
+        <div className="mt-8 flex flex-col items-center text-gray-300 relative">
+          {/* Gradient Waves Behind Image */}
+          <div className="absolute w-40 h-40 rounded-full bg-gradient-to-r from-pink-500 to-fuchsia-400 opacity-30 animate-[wave_2.5s_ease-out_infinite]"></div>
+          <div className="absolute w-40 h-40 rounded-full bg-gradient-to-r from-pink-500 to-fuchsia-400 opacity-20 animate-[wave_2.5s_ease-out_infinite_0.4s]"></div>
+          <div className="absolute w-40 h-40 rounded-full bg-gradient-to-r from-pink-500 to-fuchsia-400 opacity-10 animate-[wave_2.5s_ease-out_infinite_0.8s]"></div>
+
+          {/* Profile Image */}
+          <div className="relative">
+            <img
+              src={user?.photoUrl}
+              alt="Profile"
+              className="w-28 h-28 rounded-full object-cover border-4 border-transparent shadow-md z-[5] relative"
+            />
+          </div>
+
+          {/* Spinner + Text */}
+          <div className="flex gap-2 items-center mt-4 z-[6]">
+            {/* <div className="h-6 w-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> */}
+            <p className="text-lg font-semibold">
+              Loading more profiles for you ...
+            </p>
+          </div>
         </div>
       )}
     </div>
