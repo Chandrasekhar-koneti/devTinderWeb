@@ -8,7 +8,9 @@ const Body = () => {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <div className="pt-[20px]">
+        <Outlet />
+      </div>
     </>
   );
 };
