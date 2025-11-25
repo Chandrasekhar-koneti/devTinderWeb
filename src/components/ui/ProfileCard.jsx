@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Form from "./Form";
 import { FaEdit } from "react-icons/fa";
+import { getImageSrc } from "../ImageHelper";
 
 const ProfileCard = () => {
   const [OpenEditProfile, setOpenEditProfile] = useState(false);
   const user = useSelector((store) => store.user);
   if (!user) return null;
 
-  const { firstName, lastName, age, about, photoUrl, emailId, skills, gender } =
+  const { firstName, lastName, age, about, photo, emailId, skills, gender } =
     user;
 
   return (
@@ -21,7 +22,7 @@ const ProfileCard = () => {
           <div className="p-6 flex flex-col items-center relative z-10">
             <div className="relative">
               <img
-                src={photoUrl}
+                src={getImageSrc(photo)}
                 alt="Profile"
                 className="w-28 h-28 rounded-full object-cover border-4 border-transparent shadow-md transition-all duration-300 hover:border-fuchsia-500"
               />

@@ -6,6 +6,7 @@ import { addUser } from "../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { getImageSrc } from "../ImageHelper";
 
 const Form = ({ setOpenEditProfile }) => {
   const user = useSelector((store) => store.user);
@@ -22,7 +23,7 @@ const Form = ({ setOpenEditProfile }) => {
       /^[a-zA-Z\s]*$/,
       "Name can only contain letters and spaces"
     ),
-    photoUrl: Yup.string().required("PhotoUrl is required"),
+    photo: Yup.string().required("Photo is required"),
     about: Yup.string().required("About is required"),
     skills: Yup.array()
       .min(1, "Add at least one skill")
@@ -35,7 +36,7 @@ const Form = ({ setOpenEditProfile }) => {
     initialValues: {
       firstName: user?.firstName ? user.firstName : "",
       lastName: user?.lastName ? user.lastName : "",
-      photoUrl: user?.photoUrl ? user.photoUrl : "",
+      photo: user?.photo ? getImageSrc(user.photo) : "",
       about: user?.about ? user.about : "",
       skills: user?.skills ? user.skills : [],
       age: user?.age ? user.age : "",
@@ -55,6 +56,8 @@ const Form = ({ setOpenEditProfile }) => {
         `${import.meta.env.VITE_BASE_URL}/profile/edit`,
         values,
         {
+          headers: { "Content-Type": "multipart/form-data" },
+
           withCredentials: true,
         }
       );
@@ -146,23 +149,25 @@ const Form = ({ setOpenEditProfile }) => {
           )}
         </div>
 
-        <div>
-          <label className="floating-label">
-            <span>Photo URL</span>
-            <input
-              type="text"
-              placeholder="Paste your photo url"
-              className="input input-md w-full"
-              value={formik.values.photoUrl}
-              onChange={(e) => {
-                formik.setFieldTouched("photoUrl", false, false);
-                formik.setFieldValue("photoUrl", e.target.value);
-              }}
-            />
+        <div className="w-full max-w-full">
+          <label className="block text-xs mb-1">Upload Photo</label>
+
+          <label htmlFor="photo" className="input input-md w-full">
+            {formik.values.photo
+              ? formik.values.firstName + " image uploaded"
+              : "Choose File"}
           </label>
-          {formik.touched.photoUrl && formik.errors.photoUrl && (
+
+          <input
+            id="photo"
+            type="file"
+            accept="image/*"
+            className="hidden "
+            onChange={(e) => formik.setFieldValue("photo", e.target.files[0])}
+          />
+          {formik.touched.photo && formik.errors.photo && (
             <span className="text-red-500 text-xs mt-1">
-              {formik.errors.photoUrl}
+              {formik.errors.photo}
             </span>
           )}
         </div>

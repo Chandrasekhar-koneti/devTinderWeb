@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { removeUser } from "../../redux/slices/userSlice";
+import { getImageSrc } from "../ImageHelper";
 
 const Navbar = () => {
   const loggedInUserData = useSelector((store) => store.user);
+  console.log();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -84,7 +86,8 @@ const Navbar = () => {
                   <img
                     alt="Profile"
                     src={
-                      loggedInUserData?.photoUrl || "/images/default-avatar.png"
+                      getImageSrc(loggedInUserData?.photo) ||
+                      "/images/default-avatar.png"
                     }
                     className="w-full h-full object-cover"
                   />

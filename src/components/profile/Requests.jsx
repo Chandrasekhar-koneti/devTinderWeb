@@ -9,6 +9,7 @@ import { FaCheck } from "react-icons/fa";
 import useProfile from "../../CustomHooks/useProfile";
 import Nodatafound from "../../Lotties/Nodatafound.json";
 import Lottie from "lottie-react";
+import { getImageSrc } from "../ImageHelper";
 
 const Requests = () => {
   const dispatch = useDispatch();
@@ -89,7 +90,7 @@ const Requests = () => {
                   <div className="relative">
                     <img
                       src={
-                        user?.photoUrl ||
+                        getImageSrc(user?.photo) ||
                         "https://via.placeholder.com/150?text=No+Image"
                       }
                       alt={user?.firstName}
