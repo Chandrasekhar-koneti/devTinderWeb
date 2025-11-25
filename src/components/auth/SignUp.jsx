@@ -89,7 +89,6 @@ const SignUp = () => {
     input.value = "";
   };
 
-  console.log("selected file:", formik.values.photo);
   const handleSubmit = async (values) => {
     try {
       const formData = new FormData();
