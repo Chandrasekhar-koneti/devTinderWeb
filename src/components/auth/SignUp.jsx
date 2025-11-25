@@ -313,7 +313,7 @@ const SignUp = () => {
                       formik.setFieldValue("photo", e.target.files[0])
                     }
                   />
-                  {formik.touched.age && formik.errors.age && (
+                  {formik.touched.photo && formik.errors.photo && (
                     <span className="text-red-500 text-xs mt-1">
                       {formik.errors.photo}
                     </span>

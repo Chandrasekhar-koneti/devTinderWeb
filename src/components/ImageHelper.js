@@ -1,5 +1,5 @@
 export const getImageSrc = (photo) => {
-  if (!photo) return "/default.jpg";
+  if (!photo) return "/images/default-avatar.png";
 
   if (photo.data) {
     const base64 = btoa(
