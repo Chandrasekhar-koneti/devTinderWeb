@@ -65,7 +65,7 @@ const SignUp = () => {
       firstName: "",
       lastName: "",
       emailId: "",
-      photoUrl: "",
+      photoUrl: null,
       about: "",
       skills: [],
       age: "",
@@ -91,16 +91,25 @@ const SignUp = () => {
 
   const handleSubmit = async (values) => {
     try {
-      const payload = Object.fromEntries(
-        Object.entries(values).filter(([_, v]) => v !== "")
-      );
+      const formData = new FormData();
+
+      for (let key in values) {
+        if (key === "photo" && values.photo) {
+          formData.append("photo", values.photo);
+        } else if (key !== "photo") {
+          formData.append(key, values[key]);
+        }
+      }
+
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/signup`,
-        payload,
+        formData,
         {
+          headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
         }
       );
+
       if (res.data.msg === "user added") navigate("/login");
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed");
@@ -121,11 +130,15 @@ const SignUp = () => {
       "confirmPassword",
     ];
 
-    step1Fields.forEach((f) => formik.setFieldTouched(f, true));
-    await formik.validateForm();
+    step1Fields.forEach((f) => formik.setFieldTouched(f, true, true));
 
-    const hasErrors = step1Fields.some((field) => formik.errors[field]);
-    if (!hasErrors) setStep(2);
+    const errors = await formik.validateForm();
+
+    const hasErrors = step1Fields.some((field) => errors[field]);
+
+    if (!hasErrors) {
+      setStep(2);
+    }
   };
 
   const handleBack = () => setStep((prev) => prev - 1);
@@ -268,14 +281,35 @@ const SignUp = () => {
             {/* STEP 2 */}
             {step === 2 && (
               <>
-                {/* Photo URL */}
-                <div className="w-[320px] max-w-full">
-                  <label className="block text-xs mb-1">Photo URL</label>
+                {/* Photo Upload */}
+                {/* <div className="w-[320px] max-w-full">
+                  <label className="block text-xs mb-1">Upload Photo</label>
                   <input
-                    type="text"
-                    placeholder="Paste your photo URL"
+                    type="file"
+                    accept="image/*"
                     className="input input-sm w-full bg-white/20 border text-white"
-                    {...formik.getFieldProps("photoUrl")}
+                    {...formik.getFieldProps("photo")}
+                  />
+                </div> */}
+
+                <div className="w-[320px] max-w-full">
+                  <label className="block text-xs mb-1">Upload Photo</label>
+
+                  <label
+                    htmlFor="photo"
+                    className="w-full h-10 bg-white/20 border border-white/20 rounded flex items-center px-3 cursor-pointer text-white text-xs"
+                  >
+                    Choose File
+                  </label>
+
+                  <input
+                    id="photo"
+                    type="file"
+                    accept="image/*"
+                    className="hidden "
+                    onChange={(e) =>
+                      formik.setFieldValue("photo", e.target.files[0])
+                    }
                   />
                 </div>
 
