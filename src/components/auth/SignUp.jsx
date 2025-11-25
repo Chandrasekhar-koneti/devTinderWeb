@@ -65,7 +65,7 @@ const SignUp = () => {
       firstName: "",
       lastName: "",
       emailId: "",
-      photoUrl: null,
+      photo: null,
       about: "",
       skills: [],
       age: "",
@@ -299,7 +299,9 @@ const SignUp = () => {
                     htmlFor="photo"
                     className="w-full h-10 bg-white/20 border border-white/20 rounded flex items-center px-3 cursor-pointer text-white text-xs"
                   >
-                    Choose File
+                    {formik.values.photo
+                      ? formik.values.photo.name
+                      : "Choose File"}
                   </label>
 
                   <input
