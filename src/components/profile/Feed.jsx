@@ -10,6 +10,7 @@ import useProfile from "../../CustomHooks/useProfile";
 import Lottie from "lottie-react";
 import Nodata from "../../Lotties/Nodata.json";
 import { useSelector } from "react-redux";
+import { getImageSrc } from "../ImageHelper";
 
 const SWIPE_THRESHOLD = 120; //drag
 
@@ -139,7 +140,10 @@ export default function Feed() {
       >
         <div
           className="w-full h-full rounded-3xl bg-cover bg-center shadow-xl border border-white/10 overflow-hidden"
-          style={{ backgroundImage: `url(${person.photoUrl})`, zIndex: index }}
+          style={{
+            backgroundImage: `url( ${getImageSrc(person.photo)})`,
+            zIndex: index,
+          }}
         >
           <div className="absolute inset-0 bg-gradient-to-t rounded-3xl from-black/90 via-black/40 to-transparent"></div>
 
@@ -254,7 +258,7 @@ export default function Feed() {
           {/* Profile Image */}
           <div className="relative">
             <img
-              src={user?.photoUrl}
+              src={getImageSrc(user?.photo)}
               alt="Profile"
               className="w-28 h-28 rounded-full object-cover border-4 border-transparent shadow-md z-[5] relative"
             />

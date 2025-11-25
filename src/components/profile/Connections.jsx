@@ -90,7 +90,7 @@ const Connections = () => {
             <div className="flex flex-col items-center">
               <div className="relative">
                 <img
-                  src={person.photoUrl}
+                  src={person.photo}
                   alt={person.firstName}
                   className="rounded-full w-24 h-24 object-cover border-4 border-transparent group-hover:border-primary transition-all duration-500"
                 />
