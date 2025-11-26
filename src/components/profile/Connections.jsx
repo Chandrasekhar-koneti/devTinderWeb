@@ -9,6 +9,7 @@ import Nodata from "../../Lotties/Nodata.json";
 import Lottie from "lottie-react";
 import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineWavingHand } from "react-icons/md";
+import { getImageSrc } from "../ImageHelper";
 
 const Connections = () => {
   const dispatch = useDispatch();
@@ -90,7 +91,7 @@ const Connections = () => {
             <div className="flex flex-col items-center">
               <div className="relative">
                 <img
-                  src={person.photo}
+                  src={getImageSrc(person.photo)}
                   alt={person.firstName}
                   className="rounded-full w-24 h-24 object-cover border-4 border-transparent group-hover:border-primary transition-all duration-500"
                 />

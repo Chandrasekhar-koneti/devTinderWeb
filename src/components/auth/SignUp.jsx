@@ -42,10 +42,13 @@ const SignUp = () => {
 
     about: Yup.string()
       .required("About is required")
+      .min(10, "Minimum 10 characters")
+      .max(200, "Maximum 200 characters")
       .matches(
-        /^[A-Za-z0-9\s.,'@#!&-]{10,500}$/,
+        /^[A-Za-z0-9\s.,'@#!&-]+$/,
         "Only letters, numbers and basic punctuation"
       )
+
       .min(10, "Minimum 10 characters")
       .max(500, "Maximum 500 characters"),
 
@@ -97,7 +100,11 @@ const SignUp = () => {
         if (key === "photo" && values.photo) {
           formData.append("photo", values.photo);
         } else if (key !== "photo") {
-          formData.append(key, values[key]);
+          if (Array.isArray(values[key])) {
+            formData.append(key, JSON.stringify(values[key]));
+          } else {
+            formData.append(key, values[key]);
+          }
         }
       }
 
@@ -334,7 +341,7 @@ const SignUp = () => {
                         formik.setFieldValue("photo", compressed);
                       } catch (err) {
                         console.log("Compression error:", err);
-                        formik.setFieldValue("photo", file); // fallback
+                        formik.setFieldValue("photo", file);
                       }
                     }}
                   />
