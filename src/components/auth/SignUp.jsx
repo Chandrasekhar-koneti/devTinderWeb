@@ -334,7 +334,7 @@ const SignUp = () => {
                         formik.setFieldValue("photo", compressed);
                       } catch (err) {
                         console.log("Compression error:", err);
-                        formik.setFieldValue("photo", file); // fallback
+                        formik.setFieldValue("photo", file);
                       }
                     }}
                   />
