@@ -43,7 +43,7 @@ const SignUp = () => {
     about: Yup.string()
       .required("About is required")
       .min(10, "Minimum 10 characters")
-      .max(500, "Maximum 500 characters")
+      .max(200, "Maximum 200 characters")
       .matches(
         /^[A-Za-z0-9\s.,'@#!&-]+$/,
         "Only letters, numbers and basic punctuation"
