@@ -308,11 +308,37 @@ const SignUp = () => {
                     id="photo"
                     type="file"
                     accept="image/*"
-                    className="hidden "
-                    onChange={(e) =>
-                      formik.setFieldValue("photo", e.target.files[0])
-                    }
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+
+                      // Prevent extremely large images
+                      if (file.size > 20 * 1024 * 1024) {
+                        setError("Photo too large! Max allowed size is 20MB.");
+                        return;
+                      }
+
+                      // Compress image
+                      const imageCompression = (
+                        await import("browser-image-compression")
+                      ).default;
+
+                      try {
+                        const compressed = await imageCompression(file, {
+                          maxSizeMB: 1,
+                          maxWidthOrHeight: 1200,
+                          useWebWorker: true,
+                        });
+
+                        formik.setFieldValue("photo", compressed);
+                      } catch (err) {
+                        console.log("Compression error:", err);
+                        formik.setFieldValue("photo", file); // fallback
+                      }
+                    }}
                   />
+
                   {formik.touched.photo && formik.errors.photo && (
                     <span className="text-red-500 text-xs mt-1">
                       {formik.errors.photo}
